@@ -1,4 +1,4 @@
-# Glide Yes-Code: CSV/XLS to Data Array
+# Glide CSV/XLS to Data Array
 
 This is a sample implementation of a Yes-Code column that parses CSV, TSV, XLS, or XLSX files from a URL and returns the parsed data as an array of objects or arrays.
 
