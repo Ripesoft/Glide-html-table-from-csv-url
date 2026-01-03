@@ -83,13 +83,13 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
         <div style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 10px;">
     `;
 
-    // Create tabs with single quotes inside onclick
+    // Create minimalistic tabs with accent color #7B53D4
     sheetData.forEach((sheet, idx) => {
       const isActive = idx === 0 ? 'true' : 'false';
       html += `
-        <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content=\'${sheet.sheetName}\']').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => el.style.borderBottom=''); this.style.borderBottom='3px solid #4CAF50';"
+        <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content='${sheet.sheetName}']').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => {el.style.borderBottom='none'; el.style.color='#222';}); this.style.borderBottom='2px solid #7B53D4'; this.style.color='#7B53D4';"
                 data-sheet-tab="${sheet.sheetName}"
-                style="padding: 10px 20px; cursor: pointer; background: none; border: none; font-size: 14px; ${isActive === 'true' ? 'border-bottom: 3px solid #4CAF50; font-weight: bold;' : ''}">
+                style="padding: 6px 16px; cursor: pointer; background: none; border: none; outline: none; font-size: 15px; transition: color 0.2s, border-bottom 0.2s; color: ${isActive === 'true' ? '#7B53D4' : '#222'}; border-bottom: ${isActive === 'true' ? '2px solid #7B53D4' : 'none'}; margin-right: 8px;">
           ${sheet.sheetName}
         </button>
       `;
