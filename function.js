@@ -58,6 +58,6 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
       throw err;
     }
   } else {
-    throw new Error('Unsupported file type. Supported: csv, tsv, xls, xlsx');
+    return 'return: Unsupported file type. Supported: csv, tsv, xls, xlsx';
   }
 };
