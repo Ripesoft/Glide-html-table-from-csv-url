@@ -83,13 +83,13 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
         <div style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 10px;">
     `;
 
-    // Create minimalistic tabs with accent color #7B53D4
+    // Create minimalistic tabs with black and gray only
     sheetData.forEach((sheet, idx) => {
       const isActive = idx === 0 ? 'true' : 'false';
       html += `
-        <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content='${sheet.sheetName}']').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => {el.style.borderBottom='none'; el.style.color='#222';}); this.style.borderBottom='2px solid #7B53D4'; this.style.color='#7B53D4';"
+        <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content='${sheet.sheetName}']').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => {el.style.borderBottom='2px solid #eee'; el.style.color='#666';}); this.style.borderBottom='2px solid #111'; this.style.color='#111';"
                 data-sheet-tab="${sheet.sheetName}"
-                style="padding: 6px 16px; cursor: pointer; background: none; border: none; outline: none; font-size: 15px; transition: color 0.2s, border-bottom 0.2s; color: ${isActive === 'true' ? '#7B53D4' : '#222'}; border-bottom: ${isActive === 'true' ? '2px solid #7B53D4' : 'none'}; margin-right: 8px;">
+                style="padding: 6px 16px; cursor: pointer; background: none; border: none; outline: none; font-size: 15px; transition: color 0.2s, border-bottom 0.2s; color: ${isActive === 'true' ? '#111' : '#666'}; border-bottom: 2px solid ${isActive === 'true' ? '#111' : '#eee'}; margin-right: 8px;">
           ${sheet.sheetName}
         </button>
       `;
