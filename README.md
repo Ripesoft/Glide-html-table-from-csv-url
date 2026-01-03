@@ -21,7 +21,7 @@ To use this column in Glide, paste this link into the Experimental Code Column a
 
 ## Result
 
-Returns an array of parsed data. If `hasHeader` is true, returns an array of objects with keys from the header. If false, returns an array of arrays.
+Returns an HTML ready to use in HTML to URL column and then in Web Embed component.
 
 ## Dependencies
 
