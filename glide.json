@@ -1,6 +1,6 @@
 {
   "name": "Hell Yes Code",
-  "description": "The yes-codest of columns.",
+  "description": "Experimental column for CSV/XLSX processing.",
   "author": "Mark Probst <mark@glideapps.com>",
   "params": [
     {
@@ -20,6 +20,6 @@
     }
   ],
   "result": {
-    "type": "primitive"
+    "type": "string"
   }
 }

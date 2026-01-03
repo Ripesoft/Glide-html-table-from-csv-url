@@ -1,51 +1,60 @@
 window.function = async function(isDownload, hasHeader, fileUrl) {
+  // Unwrap Glide parameter objects (they arrive as { value: ... })
+  isDownload = isDownload?.value ?? isDownload;
+  hasHeader = hasHeader?.value ?? hasHeader;
+  const fileParam = fileUrl?.value ?? fileUrl;
+
   // Determine filename or URL string safely (support File/Blob objects)
   let extension = '';
-  if (typeof fileUrl === 'string') {
-    extension = fileUrl.split('.').pop().toLowerCase();
-  } else if (fileUrl && (fileUrl.name || fileUrl.fileName)) {
-    const name = fileUrl.name || fileUrl.fileName;
+  if (typeof fileParam === 'string') {
+    extension = fileParam.split('.').pop().toLowerCase();
+  } else if (fileParam && (fileParam.name || fileParam.fileName)) {
+    const name = fileParam.name || fileParam.fileName;
     extension = name.split('.').pop().toLowerCase();
   }
 
+  // Helper to return a JSON-stringified, consistent result envelope
+  const okResult = (payload) => JSON.stringify({ ok: true, payload });
+  const errResult = (message) => JSON.stringify({ ok: false, error: message });
+
   if (extension === 'csv' || extension === 'tsv') {
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve) => {
       const config = {
         header: hasHeader,
         complete: function(results) {
-          resolve(results.data);
+          resolve(okResult({ format: extension, data: results.data }));
         },
         error: function(err) {
-          reject(err);
+          resolve(errResult('CSV parse error: ' + (err?.message || err)));
         }
       };
 
       // If a URL string was provided, allow downloading when requested
-      if (typeof fileUrl === 'string') {
+      if (typeof fileParam === 'string') {
         config.download = isDownload;
-        Papa.parse(fileUrl, config);
+        Papa.parse(fileParam, config);
       } else {
         // For File/Blob objects, pass the object directly to Papa.parse
-        Papa.parse(fileUrl, config);
+        Papa.parse(fileParam, config);
       }
     });
   } else if (extension === 'xls' || extension === 'xlsx') {
     try {
       let arrayBuffer;
 
-      if (typeof fileUrl === 'string') {
-        const response = await fetch(fileUrl);
+      if (typeof fileParam === 'string') {
+        const response = await fetch(fileParam);
         if (!response.ok) {
-          throw new Error('Failed to fetch file');
+          return errResult('Failed to fetch file: ' + response.status);
         }
         arrayBuffer = await response.arrayBuffer();
       } else {
         // For File/Blob objects, prefer the built-in arrayBuffer method
-        if (typeof fileUrl.arrayBuffer === 'function') {
-          arrayBuffer = await fileUrl.arrayBuffer();
+        if (typeof fileParam.arrayBuffer === 'function') {
+          arrayBuffer = await fileParam.arrayBuffer();
         } else {
           // Fallback: use the Fetch API Response to obtain an ArrayBuffer
-          arrayBuffer = await new Response(fileUrl).arrayBuffer();
+          arrayBuffer = await new Response(fileParam).arrayBuffer();
         }
       }
 
@@ -53,11 +62,11 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(sheet, { header: hasHeader ? 1 : undefined });
-      return data;
+      return okResult({ format: 'xlsx', sheetName, data });
     } catch (err) {
-      throw err;
+      return errResult('XLSX parse error: ' + (err?.message || err));
     }
   } else {
-    return 'return: Unsupported file type. Supported: csv, tsv, xls, xlsx';
+    return errResult('Unsupported file type. Supported: csv, tsv, xls, xlsx');
   }
 };
