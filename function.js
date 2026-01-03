@@ -100,7 +100,7 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
         header: hasHeader,
         complete: function(results) {
           const htmlTable = dataToHtmlTable(results.data);
-          resolve(okResult({ format: extension, data: results.data, html: htmlTable }));
+          resolve(htmlTable);
         },
         error: function(err) {
           resolve(errResult('CSV parse error: ' + (err?.message || err)));
@@ -147,7 +147,7 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
 
       const html = generateTabbedHtml(sheetData);
       
-      return okResult({ format: 'xlsx', sheets: sheetData, html });
+      return html;
     } catch (err) {
       return errResult('XLSX parse error: ' + (err?.message || err));
     }
