@@ -120,7 +120,13 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
           resolve(htmlTable);
         },
         error: function(err) {
-          resolve(errResult('CSV parse error: ' + (err?.message || err)));
+          resolve(`
+            <div style="display: flex; align-items: center; gap: 10px; font-family: 'Inter', Arial, sans-serif; font-size: 16px; color: #444; padding: 24px 0;">
+              <span style='display: inline-block; width: 18px; height: 18px; border: 2.5px solid #bbb; border-top: 2.5px solid #111; border-radius: 50%; animation: spin 1s linear infinite;'></span>
+              fetching file
+              <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+            </div>
+          `);
         }
       };
 
@@ -140,7 +146,13 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
       if (typeof fileParam === 'string') {
         const response = await fetch(fileParam);
         if (!response.ok) {
-          return errResult('Failed to fetch file: ' + response.status);
+          return `
+            <div style=\"display: flex; align-items: center; gap: 10px; font-family: 'Inter', Arial, sans-serif; font-size: 16px; color: #444; padding: 24px 0;\">
+              <span style='display: inline-block; width: 18px; height: 18px; border: 2.5px solid #bbb; border-top: 2.5px solid #111; border-radius: 50%; animation: spin 1s linear infinite;'></span>
+              fetching file
+              <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+            </div>
+          `;
         }
         arrayBuffer = await response.arrayBuffer();
       } else {
@@ -172,9 +184,21 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
       
       return html;
     } catch (err) {
-      return errResult('XLSX parse error: ' + (err?.message || err));
+      return `
+        <div style=\"display: flex; align-items: center; gap: 10px; font-family: 'Inter', Arial, sans-serif; font-size: 16px; color: #444; padding: 24px 0;\">
+          <span style='display: inline-block; width: 18px; height: 18px; border: 2.5px solid #bbb; border-top: 2.5px solid #111; border-radius: 50%; animation: spin 1s linear infinite;'></span>
+          fetching file
+          <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+        </div>
+      `;
     }
   } else {
-    return errResult('Unsupported file type. Supported: csv, tsv, xls, xlsx');
+    return `
+      <div style=\"display: flex; align-items: center; gap: 10px; font-family: 'Inter', Arial, sans-serif; font-size: 16px; color: #444; padding: 24px 0;\">
+        <span style='display: inline-block; width: 18px; height: 18px; border: 2.5px solid #bbb; border-top: 2.5px solid #111; border-radius: 50%; animation: spin 1s linear infinite;'></span>
+        fetching file
+        <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+      </div>
+    `;
   }
 };
