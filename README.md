@@ -4,7 +4,9 @@ This column parses CSV, TSV, XLS, or XLSX files from a URL and returns the parse
 
 ## Getting started
 
-To use this column in Glide, paste this link into the Experimental Code Column and declare the input parameters: https://ripesoft.github.io/Glide-html-table-from-csv-url/
+To use test column in Glide, paste this link into the Experimental Code Column and declare the input parameters: https://ripesoft.github.io/Glide-html-table-from-csv-url/
+
+To use it in production, fork the repo and hos it on Github Pages or Replit. I can't guarantee this link will stay up or that I won't introduce any changes that won't break your implementation.
 
 ## Files
 
