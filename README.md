@@ -1,16 +1,28 @@
-# Glide Yes-Code Template
+# Glide Yes-Code: CSV to HTML Table
 
-This is a sample and template for implementing your own Yes-Code column.  It's a fully functional implementation of a simple substring column.
+This is a sample implementation of a Yes-Code column that parses a CSV file from a URL and returns the parsed data as an array of objects.
 
 ## Getting started
 
-The first thing to do is to fork [this repl](https://replit.com/@MarkProbst/glide-yes-code-substring#README.md) so you have your own copy of it that you can modify.  You can then try the URL of your copy (you should see it in the mini-browser on your right) in Glide.  Just make sure to delete any columns you made with it, and reload Glide before you move on.
+To use this Yes-Code column in Glide, you need to host this code somewhere accessible via URL (e.g., on GitHub Pages, Replit, or your own server). Then, provide that URL in Glide when adding a Yes-Code column.
 
-To implement your own column you only have to change two files:
+## Files
 
-* `manifest.json` contains metadata about your function, such as its name, a description, what parameters it takes, and what kind of result it produces.
-* `function.js` is the actual JavaScript code of your column.
+* `manifest.json`: Contains metadata about the function, including its name, description, parameters (isDownload, hasHeader, fileUrl), and result type.
+* `function.js`: The JavaScript code that uses Papa Parse to fetch and parse the CSV from the provided URL.
+* `driver.js`: Handles communication between Glide and the function.
+* `index.html`: The entry point that loads the scripts.
 
-The manifest should be mostly self-explanatory, except for what `type`s are allowed, which at the moment is only `string`, `number`, and `boolean`.  Glide will refuse to load ill-formed manifests.  If you make a change to your manifest you'll have to reload Glide - it won't reload it on its own.  We'll fix that.
+## Parameters
 
-The implementation file has comments explaining it.
+- `isDownload` (boolean): Whether to download the file (usually true for URLs).
+- `hasHeader` (boolean): Whether the CSV has a header row.
+- `fileUrl` (string): The URL of the CSV file to parse.
+
+## Result
+
+Returns an array of objects representing the parsed CSV data. Each object corresponds to a row, with keys from the header (if present) or indexed numerically.
+
+## Dependencies
+
+This implementation uses Papa Parse for CSV parsing. Make sure Papa Parse is available (e.g., via CDN in your hosting environment).

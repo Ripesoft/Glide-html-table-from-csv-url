@@ -1,12 +1,14 @@
-const functions = new Map();
-
-window.function = function (code, ...params) {
-  code = code.value;
-  if (code === undefined) return undefined;
-
-  const functionCode = `async (p1,p2,p3,p4,p5,p6,p7)=>{ ${code} }`;
-  const fn = eval(functionCode);
-  functions.set(code, fn);
-
-  return fn(...params.map(p => p.value));
-}
+window.function = function(isDownload, hasHeader, fileUrl) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(fileUrl, {
+      download: isDownload,
+      header: hasHeader,
+      complete: function(results) {
+        resolve(results.data);
+      },
+      error: function(err) {
+        reject(err);
+      }
+    });
+  });
+};
