@@ -1,10 +1,10 @@
 # Glide CSV/XLS to Data Array
 
-This is a sample implementation of a Yes-Code column that parses CSV, TSV, XLS, or XLSX files from a URL and returns the parsed data as an array of objects or arrays.
+This column parses CSV, TSV, XLS, or XLSX files from a URL and returns the parsed data as an array of objects or arrays.
 
 ## Getting started
 
-To use this Yes-Code column in Glide, you need to host this code somewhere accessible via URL (e.g., on GitHub Pages, Replit, or your own server). Then, provide that URL in Glide when adding a Yes-Code column.
+To use this column in Glide, paste this link into the Experimental Code Column and declare the input parameters: https://ripesoft.github.io/Glide-html-table-from-csv-url/
 
 ## Files
 
