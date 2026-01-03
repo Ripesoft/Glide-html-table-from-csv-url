@@ -24,30 +24,46 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
     }
 
     let html = '<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">';
-    
-    // Get all keys from the first row to determine columns
-    const firstRow = data[0];
-    const keys = Array.isArray(firstRow) ? 
-      firstRow.map((_, idx) => idx) : 
-      Object.keys(firstRow);
+    let keys;
+    let startIdx = 0;
 
-    // Add header row
-    if (hasHeader) {
-      html += '<thead><tr style="background-color: #f2f2f2;">';
-      keys.forEach(key => {
-        html += `<th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${key}</th>`;
-      });
-      html += '</tr></thead>';
+    // If data is array of objects, use object keys
+    if (typeof data[0] === 'object' && !Array.isArray(data[0])) {
+      keys = Object.keys(data[0]);
+      if (hasHeader) {
+        html += '<thead><tr style="background-color: #f2f2f2;">';
+        keys.forEach(key => {
+          html += `<th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${key}</th>`;
+        });
+        html += '</tr></thead>';
+      }
+    } else if (Array.isArray(data[0])) {
+      // If data is array of arrays, use first row as header if hasHeader
+      keys = data[0].map((_, idx) => idx);
+      if (hasHeader) {
+        html += '<thead><tr style="background-color: #f2f2f2;">';
+        data[0].forEach(cell => {
+          html += `<th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${cell}</th>`;
+        });
+        html += '</tr></thead>';
+        startIdx = 1;
+      }
     }
 
     // Add data rows
     html += '<tbody>';
     data.forEach((row, rowIdx) => {
+      if (Array.isArray(row) && hasHeader && rowIdx === 0) return; // skip header row for array-of-arrays
       html += `<tr style="${rowIdx % 2 === 0 ? 'background-color: #ffffff;' : 'background-color: #f9f9f9;'}">`;
-      keys.forEach(key => {
-        const value = Array.isArray(row) ? row[key] : row[key];
-        html += `<td style="border: 1px solid #ddd; padding: 8px;">${value ?? ''}</td>`;
-      });
+      if (typeof row === 'object' && !Array.isArray(row)) {
+        keys.forEach(key => {
+          html += `<td style="border: 1px solid #ddd; padding: 8px;">${row[key] ?? ''}</td>`;
+        });
+      } else if (Array.isArray(row)) {
+        row.forEach(cell => {
+          html += `<td style="border: 1px solid #ddd; padding: 8px;">${cell ?? ''}</td>`;
+        });
+      }
       html += '</tr>';
     });
     html += '</tbody></table>';
@@ -67,11 +83,11 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
         <div style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 10px;">
     `;
 
-    // Create tabs
+    // Create tabs with single quotes inside onclick
     sheetData.forEach((sheet, idx) => {
       const isActive = idx === 0 ? 'true' : 'false';
       html += `
-        <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content=\"${sheet.sheetName}\"]').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => el.style.borderBottom=''); this.style.borderBottom='3px solid #4CAF50';" 
+        <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content=\'${sheet.sheetName}\']').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => el.style.borderBottom=''); this.style.borderBottom='3px solid #4CAF50';"
                 data-sheet-tab="${sheet.sheetName}"
                 style="padding: 10px 20px; cursor: pointer; background: none; border: none; font-size: 14px; ${isActive === 'true' ? 'border-bottom: 3px solid #4CAF50; font-weight: bold;' : ''}">
           ${sheet.sheetName}
@@ -141,7 +157,13 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
       // Process all sheets and create tabbed HTML
       const sheetData = workbook.SheetNames.map(sheetName => {
         const sheet = workbook.Sheets[sheetName];
-        const data = XLSX.utils.sheet_to_json(sheet, { header: hasHeader ? 1 : undefined });
+        // If hasHeader, let XLSX infer headers (objects); else, get array of arrays
+        let data;
+        if (hasHeader) {
+          data = XLSX.utils.sheet_to_json(sheet, { header: undefined });
+        } else {
+          data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        }
         return { sheetName, data };
       });
 
