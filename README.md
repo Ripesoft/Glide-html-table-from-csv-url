@@ -1,6 +1,6 @@
-# Glide Yes-Code: CSV to HTML Table
+# Glide Yes-Code: CSV/XLS to Data Array
 
-This is a sample implementation of a Yes-Code column that parses a CSV file from a URL and returns the parsed data as an array of objects.
+This is a sample implementation of a Yes-Code column that parses CSV, TSV, XLS, or XLSX files from a URL and returns the parsed data as an array of objects or arrays.
 
 ## Getting started
 
@@ -9,20 +9,20 @@ To use this Yes-Code column in Glide, you need to host this code somewhere acces
 ## Files
 
 * `manifest.json`: Contains metadata about the function, including its name, description, parameters (isDownload, hasHeader, fileUrl), and result type.
-* `function.js`: The JavaScript code that uses Papa Parse to fetch and parse the CSV from the provided URL.
+* `function.js`: The JavaScript code that uses Papa Parse for CSV/TSV and SheetJS for XLS/XLSX files.
 * `driver.js`: Handles communication between Glide and the function.
 * `index.html`: The entry point that loads the scripts.
 
 ## Parameters
 
-- `isDownload` (boolean): Whether to download the file (usually true for URLs).
-- `hasHeader` (boolean): Whether the CSV has a header row.
-- `fileUrl` (string): The URL of the CSV file to parse.
+- `isDownload` (boolean): Whether to download the file (used for CSV/TSV; XLS/XLSX always download).
+- `hasHeader` (boolean): Whether the file has a header row.
+- `fileUrl` (string): The URL of the file to parse (supports .csv, .tsv, .xls, .xlsx).
 
 ## Result
 
-Returns an array of objects representing the parsed CSV data. Each object corresponds to a row, with keys from the header (if present) or indexed numerically.
+Returns an array of parsed data. If `hasHeader` is true, returns an array of objects with keys from the header. If false, returns an array of arrays.
 
 ## Dependencies
 
-This implementation uses Papa Parse for CSV parsing. Make sure Papa Parse is available (e.g., via CDN in your hosting environment).
+This implementation uses Papa Parse for CSV/TSV parsing and SheetJS (XLSX) for Excel file parsing. Both are included locally.
