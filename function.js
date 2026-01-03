@@ -80,7 +80,7 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
 
     let html = `
       <div style="font-family: Arial, sans-serif;">
-        <div style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 10px;">
+        <div style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 10px; align-items: flex-end;">
     `;
 
     // Create minimalistic tabs with black and gray only
@@ -89,7 +89,7 @@ window.function = async function(isDownload, hasHeader, fileUrl) {
       html += `
         <button onclick="document.querySelectorAll('[data-sheet-content]').forEach(el => el.style.display='none'); document.querySelector('[data-sheet-content='${sheet.sheetName}']').style.display='block'; document.querySelectorAll('[data-sheet-tab]').forEach(el => {el.style.borderBottom='2px solid #eee'; el.style.color='#666';}); this.style.borderBottom='2px solid #111'; this.style.color='#111';"
                 data-sheet-tab="${sheet.sheetName}"
-                style="padding: 6px 16px; cursor: pointer; background: none; border: none; outline: none; font-size: 15px; transition: color 0.2s, border-bottom 0.2s; color: ${isActive === 'true' ? '#111' : '#666'}; border-bottom: 2px solid ${isActive === 'true' ? '#111' : '#eee'}; margin-right: 8px;">
+                style="padding: 6px 0 0 0; min-width: 0; flex: 1 1 0; text-align: left; cursor: pointer; background: none; border: none; outline: none; font-size: 15px; transition: color 0.2s, border-bottom 0.2s; color: ${isActive === 'true' ? '#111' : '#666'}; border-bottom: 2px solid ${isActive === 'true' ? '#111' : '#eee'}; margin-right: 8px;">
           ${sheet.sheetName}
         </button>
       `;
